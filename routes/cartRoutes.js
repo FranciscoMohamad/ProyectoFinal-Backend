@@ -1,7 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const CartManager = require('../src/cartManager');
+import express from 'express';
+import CartManager from '../src/cartManager.js';
 
+const router = express.Router();
 const cartManager = new CartManager('carts.json');
 
 // Endpoints del CARRITO
@@ -17,8 +17,13 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-    const carts = await cartManager.getCarts();
-    res.json(carts);
+    try {
+        const carts = await cartManager.getCarts();
+        res.json(carts);
+    } catch (err) {
+        console.error('Error fetching carts:', err);
+        res.status(500).send('Error fetching carts');
+    }
 });
 
 router.get('/:id', async (req, res) => {
@@ -48,4 +53,5 @@ router.post('/:cid/product/:pid', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
+

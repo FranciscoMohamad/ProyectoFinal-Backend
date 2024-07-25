@@ -1,7 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const ProductManager = require('../src/productManager');
+import express from 'express';
+import ProductManager from '../src/productManager.js';
 
+const router = express.Router();
 const manager = new ProductManager('products.json');
 
 // Endpoint para agregar un nuevo producto
@@ -39,8 +39,13 @@ router.post('/', async (req, res) => {
 
 // Endpoint para obtener todos los productos
 router.get('/', async (req, res) => {
-    const products = await manager.getProducts();
-    res.json(products);
+    try {
+        const products = await manager.getProducts();
+        res.json(products);
+    } catch (err) {
+        console.error('Error fetching products:', err);
+        res.status(500).send('Error fetching products');
+    }
 });
 
 // Endpoint para obtener un producto por ID
@@ -100,4 +105,5 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
+
