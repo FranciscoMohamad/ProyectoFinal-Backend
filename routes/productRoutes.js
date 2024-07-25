@@ -1,5 +1,6 @@
 import express from 'express';
 import ProductManager from '../src/productManager.js';
+import { io } from '../app.js'; // Importar io desde app.js
 
 const router = express.Router();
 const manager = new ProductManager('products.json');
@@ -9,27 +10,26 @@ router.post('/', async (req, res) => {
     try {
         const { title, description, code, price, stock, category, thumbnails } = req.body;
 
-        // Validar que los campos obligatorios estén presentes
         if (!title || !description || !code || !price || !stock || !category) {
             return res.status(400).json({ error: 'Todos los campos son obligatorios excepto thumbnails' });
         }
 
-        // Crear el objeto de producto con valores por defecto
         const newProduct = {
             title,
             description,
             code,
-            price: Number(price), // Asegurar que price sea un número
-            status: true, // Por defecto true
-            stock: Number(stock), // Asegurar que stock sea un número
+            price: Number(price),
+            status: true,
+            stock: Number(stock),
             category,
-            thumbnails: thumbnails || [], // Si no se provee thumbnails, inicializar como un array vacío
+            thumbnails: thumbnails || [],
         };
 
-        // Agregar el producto usando el manager
         await manager.addProduct(newProduct);
 
-        // Confirmar que el producto se añadió correctamente
+        // Emitir evento de creación
+        io.emit('productCreated');
+
         res.status(201).send('Producto agregado correctamente');
     } catch (err) {
         console.error('Error al agregar el producto:', err);
@@ -69,7 +69,6 @@ router.put('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
     const { title, description, code, price, stock, category, thumbnails, status } = req.body;
 
-    // Validar que los campos obligatorios estén presentes
     if (!title || !description || !code || !price || !stock || !category) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios excepto thumbnails' });
     }
@@ -79,13 +78,13 @@ router.put('/:id', async (req, res) => {
     try {
         const updatedProduct = await manager.updateProduct(id, updateFields);
         if (updatedProduct) {
-            res.send('Product updated');
+            res.send('Producto actualizado');
         } else {
-            res.status(404).json({ error: 'Product not found' });
+            res.status(404).json({ error: 'Producto no encontrado' });
         }
     } catch (err) {
-        console.error('Error updating product:', err);
-        res.status(500).send('Error updating product');
+        console.error('Error al actualizar el producto:', err);
+        res.status(500).send('Error al actualizar el producto');
     }
 });
 
@@ -95,15 +94,19 @@ router.delete('/:id', async (req, res) => {
     try {
         const deletedProduct = await manager.deleteProduct(id);
         if (deletedProduct) {
-            res.send('Product deleted');
+            // Emitir evento de eliminación
+            io.emit('productDeleted');
+            res.send('Producto eliminado');
         } else {
-            res.status(404).json({ error: 'Product not found' });
+            res.status(404).json({ error: 'Producto no encontrado' });
         }
     } catch (err) {
-        console.error('Error deleting product:', err);
-        res.status(500).send('Error deleting product');
+        console.error('Error al eliminar el producto:', err);
+        res.status(500).send('Error al eliminar el producto');
     }
 });
 
 export default router;
+
+
 
