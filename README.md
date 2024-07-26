@@ -25,5 +25,7 @@ post/:cid/:pid ==> http://localhost:8082/api/carts/:cid/product/:pid
 
 ```
 ------------------------------------------------------
+Video Funcionalidad realTimeProducts:
 
+https://github.com/user-attachments/assets/7fd884a2-a7e1-4feb-b146-1ab117eac554
 
