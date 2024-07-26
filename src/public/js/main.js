@@ -1,7 +1,21 @@
 const socket = io();
 
-socket.on('updateProducts', (products) => {
-    const productList = document.getElementById('product-list');
+// Cuando se crea un producto
+socket.on('productCreated', () => {
+    fetch('/api/products')
+        .then(response => response.json())
+        .then(products => updateProductList(products));
+});
+
+// Cuando se elimina un producto
+socket.on('productDeleted', () => {
+    fetch('/api/products')
+        .then(response => response.json())
+        .then(products => updateProductList(products));
+});
+
+function updateProductList(products) {
+    const productList = document.getElementById('productList');
     productList.innerHTML = '';
 
     products.forEach(product => {
@@ -17,4 +31,4 @@ socket.on('updateProducts', (products) => {
         `;
         productList.appendChild(productItem);
     });
-});
+}

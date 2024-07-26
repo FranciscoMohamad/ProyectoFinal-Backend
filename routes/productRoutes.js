@@ -27,8 +27,8 @@ router.post('/', async (req, res) => {
 
         await manager.addProduct(newProduct);
 
-        // Emitir evento de creación
-        io.emit('productCreated');
+        // Emitir evento de creación con el producto agregado
+        io.emit('productCreated', newProduct);
 
         res.status(201).send('Producto agregado correctamente');
     } catch (err) {
@@ -94,8 +94,8 @@ router.delete('/:id', async (req, res) => {
     try {
         const deletedProduct = await manager.deleteProduct(id);
         if (deletedProduct) {
-            // Emitir evento de eliminación
-            io.emit('productDeleted');
+            // Emitir evento de eliminación con el ID del producto eliminado
+            io.emit('productDeleted', id);
             res.send('Producto eliminado');
         } else {
             res.status(404).json({ error: 'Producto no encontrado' });
@@ -107,6 +107,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 export default router;
+
 
 
 
