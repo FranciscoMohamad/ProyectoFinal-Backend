@@ -1,13 +1,27 @@
 import express from 'express';
 import { create as createHandlebars } from 'express-handlebars'; // Importar el método create
 import __dirname from './src/utils.js';
-import { Server } from 'socket.io';
+//Rutas
 import viewsRoutes from './routes/viewsRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
+// import userRoutes from './routes/userRoutes.js';
+import mongoose from "mongoose";
+
+
 
 const app = express();
 const PORT = 8082;
+
+//Coneccion a MongoDB
+mongoose.connect("mongodb+srv://elmoha624:Horacio2001@cluster0.dqusn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+
+.then(()=>{
+    console.log("conectado a la base de datos")
+})
+.catch(error=> {
+    console.log("error al contectar con la base de datos",error)
+})
 
 // Configuración de Handlebars
 const hbs = createHandlebars({
@@ -28,15 +42,6 @@ app.use(express.json());
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
 app.use('/', viewsRoutes);
+// app.use('/',userRoutes )
 
-const httpServer = app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-const io = new Server(httpServer); // Crear instancia de Server para WebSocket
-
-io.on('connection', socket => {
-    console.log("Nuevo cliente conectado");
-    socket.on('message', data => {
-        console.log(`Soy la data ${data}`);
-    });
-});
-
-export { io }; // Exportar io para usarlo en otros archivos
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

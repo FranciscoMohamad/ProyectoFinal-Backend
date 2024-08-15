@@ -1,9 +1,7 @@
 import express from 'express';
-import ProductManager from '../src/productManager.js';
-import { io } from '../app.js'; // Importar io desde app.js
+import productModel from '../src/models/product.model.js';
 
 const router = express.Router();
-const manager = new ProductManager('products.json');
 
 // Endpoint para agregar un nuevo producto
 router.post('/', async (req, res) => {
@@ -14,7 +12,7 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ error: 'Todos los campos son obligatorios excepto thumbnails' });
         }
 
-        const newProduct = {
+        const newProduct = new productModel({
             title,
             description,
             code,
@@ -23,13 +21,9 @@ router.post('/', async (req, res) => {
             stock: Number(stock),
             category,
             thumbnails: thumbnails || [],
-        };
+        });
 
-        await manager.addProduct(newProduct);
-
-        // Emitir evento de creación con el producto agregado
-        io.emit('productCreated', newProduct);
-
+        await newProduct.save();
         res.status(201).send('Producto agregado correctamente');
     } catch (err) {
         console.error('Error al agregar el producto:', err);
@@ -40,43 +34,50 @@ router.post('/', async (req, res) => {
 // Endpoint para obtener todos los productos
 router.get('/', async (req, res) => {
     try {
-        const products = await manager.getProducts();
+        const products = await productModel.find();
         res.json(products);
     } catch (err) {
-        console.error('Error fetching products:', err);
-        res.status(500).send('Error fetching products');
+        console.error('Error al obtener productos:', err);
+        res.status(500).send('Error al obtener productos');
     }
 });
 
 // Endpoint para obtener un producto por ID
 router.get('/:id', async (req, res) => {
-    const id = parseInt(req.params.id);
     try {
-        const product = await manager.getProduct(id);
+        const product = await productModel.findById(req.params.id);
         if (product) {
             res.json(product);
         } else {
-            res.status(404).json({ error: 'Product not found' });
+            res.status(404).json({ error: 'Producto no encontrado' });
         }
     } catch (err) {
-        console.error('Error fetching product:', err);
-        res.status(500).send('Error fetching product');
+        console.error('Error al obtener el producto:', err);
+        res.status(500).send('Error al obtener el producto');
     }
 });
 
 // Endpoint para actualizar un producto
 router.put('/:id', async (req, res) => {
-    const id = parseInt(req.params.id);
-    const { title, description, code, price, stock, category, thumbnails, status } = req.body;
-
-    if (!title || !description || !code || !price || !stock || !category) {
-        return res.status(400).json({ error: 'Todos los campos son obligatorios excepto thumbnails' });
-    }
-
-    const updateFields = { title, description, code, price: Number(price), stock: Number(stock), category, thumbnails: thumbnails || [], status };
-
     try {
-        const updatedProduct = await manager.updateProduct(id, updateFields);
+        const { title, description, code, price, stock, category, thumbnails, status } = req.body;
+
+        if (!title || !description || !code || !price || !stock || !category) {
+            return res.status(400).json({ error: 'Todos los campos son obligatorios excepto thumbnails' });
+        }
+
+        const updateFields = {
+            title,
+            description,
+            code,
+            price: Number(price),
+            stock: Number(stock),
+            category,
+            thumbnails: thumbnails || [],
+            status,
+        };
+
+        const updatedProduct = await productModel.findByIdAndUpdate(req.params.id, updateFields, { new: true });
         if (updatedProduct) {
             res.send('Producto actualizado');
         } else {
@@ -90,12 +91,9 @@ router.put('/:id', async (req, res) => {
 
 // Endpoint para eliminar un producto
 router.delete('/:id', async (req, res) => {
-    const id = parseInt(req.params.id);
     try {
-        const deletedProduct = await manager.deleteProduct(id);
+        const deletedProduct = await productModel.findByIdAndDelete(req.params.id);
         if (deletedProduct) {
-            // Emitir evento de eliminación con el ID del producto eliminado
-            io.emit('productDeleted', id);
             res.send('Producto eliminado');
         } else {
             res.status(404).json({ error: 'Producto no encontrado' });

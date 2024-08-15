@@ -1,5 +1,7 @@
 FRANCISCO MOHAMAD.
 
+Aplicación web con Express.js, que utiliza Handlebars para la creación de plantillas y WebSocket (a través de socket.io) para actualizaciones en tiempo real. Incluye funcionalidades para la gestión de productos, incluidas las operaciones CRUD.
+
 SERVIDOR de Expres Funcionando en el puerto 8082
 
 ------------------------------------------------------
