@@ -14,7 +14,7 @@ const app = express();
 const PORT = 8082;
 
 //Coneccion a MongoDB
-mongoose.connect("mongodb+srv://elmoha624:Horacio2001@cluster0.dqusn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+mongoose.connect("mongodb+srv://elmoha624:Horacio2001@cluster0.dqusn.mongodb.net/MyDataBase?retryWrites=true&w=majority&appName=Cluster0")
 
 .then(()=>{
     console.log("conectado a la base de datos")
@@ -27,7 +27,12 @@ mongoose.connect("mongodb+srv://elmoha624:Horacio2001@cluster0.dqusn.mongodb.net
 const hbs = createHandlebars({
     layoutsDir: __dirname + '/views/layouts/', // Directorio de layouts
     defaultLayout: 'main', // Nombre del archivo de layout
-    extname: '.handlebars' // Extensión de los archivos de plantilla
+    extname: '.handlebars', // Extensión de los archivos de plantilla
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,  // Permitir acceso a propiedades heredadas
+        allowProtoMethodsByDefault: true      // Permitir acceso a métodos heredados (si es necesario)
+    }
+   
 });
 
 app.engine('handlebars', hbs.engine);

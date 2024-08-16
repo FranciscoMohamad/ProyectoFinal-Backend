@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
             thumbnails: thumbnails || [],
         });
 
-        await newProduct.save();
+        await newProduct.save(); // Guarda el producto en la colección
         res.status(201).send('Producto agregado correctamente');
     } catch (err) {
         console.error('Error al agregar el producto:', err);
@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
 // Endpoint para obtener todos los productos
 router.get('/', async (req, res) => {
     try {
-        const products = await productModel.find();
+        const products = await productModel.find(); // Obtén todos los productos de la colección
         res.json(products);
     } catch (err) {
         console.error('Error al obtener productos:', err);
@@ -44,8 +44,9 @@ router.get('/', async (req, res) => {
 
 // Endpoint para obtener un producto por ID
 router.get('/:id', async (req, res) => {
+    const id = req.params.id;
     try {
-        const product = await productModel.findById(req.params.id);
+        const product = await productModel.findById(id); // Busca el producto por su ID en la colección
         if (product) {
             res.json(product);
         } else {
@@ -59,25 +60,19 @@ router.get('/:id', async (req, res) => {
 
 // Endpoint para actualizar un producto
 router.put('/:id', async (req, res) => {
+    const id = req.params.id;
+    const { title, description, code, price, stock, category, thumbnails, status } = req.body;
+
+    if (!title || !description || !code || !price || !stock || !category) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios excepto thumbnails' });
+    }
+
     try {
-        const { title, description, code, price, stock, category, thumbnails, status } = req.body;
-
-        if (!title || !description || !code || !price || !stock || !category) {
-            return res.status(400).json({ error: 'Todos los campos son obligatorios excepto thumbnails' });
-        }
-
-        const updateFields = {
-            title,
-            description,
-            code,
-            price: Number(price),
-            stock: Number(stock),
-            category,
-            thumbnails: thumbnails || [],
-            status,
-        };
-
-        const updatedProduct = await productModel.findByIdAndUpdate(req.params.id, updateFields, { new: true });
+        const updatedProduct = await productModel.findByIdAndUpdate(
+            id,
+            { title, description, code, price: Number(price), stock: Number(stock), category, thumbnails: thumbnails || [], status },
+            { new: true }
+        );
         if (updatedProduct) {
             res.send('Producto actualizado');
         } else {
@@ -91,8 +86,9 @@ router.put('/:id', async (req, res) => {
 
 // Endpoint para eliminar un producto
 router.delete('/:id', async (req, res) => {
+    const id = req.params.id;
     try {
-        const deletedProduct = await productModel.findByIdAndDelete(req.params.id);
+        const deletedProduct = await productModel.findByIdAndDelete(id); // Elimina el producto por su ID en la colección
         if (deletedProduct) {
             res.send('Producto eliminado');
         } else {
