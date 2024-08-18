@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle del Carrito</title>
+    <title>Detalles del Carrito</title>
 </head>
 <body>
-    <h1>Detalle del Carrito</h1>
+    <h1>Detalles del Carrito</h1>
 
-    {{#if cart}}
-        <h2>Carrito ID: {{cart._id}}</h2>
-        <h3>Productos:</h3>
+    {{#if cart.products.length}}
         <ul>
             {{#each cart.products}}
                 <li>
-                    <h4>{{this.product.title}}</h4>
-                    <p>Precio: ${{this.product.price}}</p>
+                    <h3>Producto: {{this.product.title}}</h3>
                     <p>Cantidad: {{this.quantity}}</p>
+                    <p>Precio: ${{this.product.price}}</p>
+                    <p>Categoría: {{this.product.category}}</p>
+                    <img src="{{this.product.thumbnails.[0]}}" alt="Imagen del producto">
                 </li>
             {{/each}}
         </ul>
     {{else}}
-        <p>No se encontró el carrito.</p>
+        <p>El carrito está vacío.</p>
     {{/if}}
+
+    <a href="/api/products"><button>Volver a la lista de productos</button></a>
 </body>
+</html>
