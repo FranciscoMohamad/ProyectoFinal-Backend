@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
             thumbnails: thumbnails || [],
         });
 
-        await newProduct.save(); // Guarda el producto en la colección
+        await newProduct.save();
         res.status(201).send('Producto agregado correctamente');
     } catch (err) {
         console.error('Error al agregar el producto:', err);
@@ -31,14 +31,33 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Endpoint para obtener todos los productos
-router.get('/', async (req, res) => {
+// GET /api/products
+router.get('/', async (req, res) => { 
     try {
-        const products = await productModel.find(); // Obtén todos los productos de la colección
-        res.json(products);
-    } catch (err) {
-        console.error('Error al obtener productos:', err);
-        res.status(500).send('Error al obtener productos');
+        const { limit = 5, page = 1, sort, query } = req.query;
+
+        const filter = query ? { category: query } : {};
+
+        const options = {
+            limit: parseInt(limit),
+            page: parseInt(page),
+            sort: sort ? { price: sort === 'asc' ? 1 : -1 } : {},
+        };
+
+        const products = await productModel.paginate(filter, options);
+
+        res.render('index', {
+            products: products.docs,
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage,
+            page: products.page,
+            totalPages: products.totalPages,
+        });
+    } catch (error) {
+        console.error('Error al obtener los productos:', error);
+        res.status(500).send('Error al obtener los productos');
     }
 });
 
@@ -46,7 +65,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
     try {
-        const product = await productModel.findById(id); // Busca el producto por su ID en la colección
+        const product = await productModel.findById(id);
         if (product) {
             res.json(product);
         } else {
@@ -88,7 +107,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;
     try {
-        const deletedProduct = await productModel.findByIdAndDelete(id); // Elimina el producto por su ID en la colección
+        const deletedProduct = await productModel.findByIdAndDelete(id);
         if (deletedProduct) {
             res.send('Producto eliminado');
         } else {
@@ -101,6 +120,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 export default router;
+
 
 
 

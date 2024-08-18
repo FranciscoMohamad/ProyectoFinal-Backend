@@ -1,5 +1,5 @@
 import express from 'express';
-import { create as createHandlebars } from 'express-handlebars'; // Importar el método create
+import { create as createHandlebars } from 'express-handlebars';
 import __dirname from './src/utils.js';
 //Rutas
 import viewsRoutes from './routes/viewsRoutes.js';
@@ -25,12 +25,12 @@ mongoose.connect("mongodb+srv://elmoha624:Horacio2001@cluster0.dqusn.mongodb.net
 
 // Configuración de Handlebars
 const hbs = createHandlebars({
-    layoutsDir: __dirname + '/views/layouts/', // Directorio de layouts
-    defaultLayout: 'main', // Nombre del archivo de layout
-    extname: '.handlebars', // Extensión de los archivos de plantilla
+    layoutsDir: __dirname + '/views/layouts/', 
+    defaultLayout: 'main', 
+    extname: '.handlebars', 
     runtimeOptions: {
-        allowProtoPropertiesByDefault: true,  // Permitir acceso a propiedades heredadas
-        allowProtoMethodsByDefault: true      // Permitir acceso a métodos heredados (si es necesario)
+        allowProtoPropertiesByDefault: true,  
+        allowProtoMethodsByDefault: true
     }
    
 });

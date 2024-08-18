@@ -3,26 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Lista de Productos</title>
 </head>
 <body>
+<h1>Lista de Productos</h1>
+
+{{#each products}}
     <div>
-        <h1>Hola, {{name}} Bienvenido!</h1>
-        
-        <h2>Lista de Productos</h2>
-        <ul>
-            {{#each products}}
-                <li>
-                    <h3>{{this.title}}</h3>
-                    <p>Descripción: {{this.description}}</p>
-                    <p>Código: {{this.code}}</p>
-                    <p>Precio: ${{this.price}}</p>
-                    <p>Stock: {{this.stock}}</p>
-                    <p>Categoría: {{this.category}}</p>
-                    <p>Thumbnails: {{#each this.thumbnails}}{{this}} {{/each}}</p>
-                </li>
-            {{/each}}
-        </ul>
+        <h2>{{title}}</h2>
+        <p>Precio: ${{price}}</p>
+        <p>Categoría: {{category}}</p>
+        <a href="/product/{{_id}}"><button>Detalle</button></a>
     </div>
+{{/each}}
+
+<div>
+    {{#if hasPrevPage}}
+        <a href="?page={{prevPage}}"><button>Anterior</button></a>
+    {{/if}}
+
+    <span>Página {{page}} de {{totalPages}}</span>
+
+    {{#if hasNextPage}}
+        <a href="?page={{nextPage}}"><button>Siguiente</button></a>
+    {{/if}}
+</div>
 </body>
 </html>
