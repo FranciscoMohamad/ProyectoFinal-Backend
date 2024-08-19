@@ -1,12 +1,10 @@
 FRANCISCO MOHAMAD.
 
-Aplicación web con Express.js, que utiliza Handlebars para la creación de plantillas y WebSocket (a través de socket.io) para actualizaciones en tiempo real. Incluye funcionalidades para la gestión de productos, incluidas las operaciones CRUD.
+Aplicación web con Express.js, que utiliza Handlebars para la creación de plantillas y MongoDB para la persistencia de los datos. Incluye funcionalidades para la gestión de productos y carritos, incluidas las operaciones CRUD.
 
 SERVIDOR de Expres Funcionando en el puerto 8082
 
 ------------------------------------------------------
-
-!!products.json debe arrancar con un array vacío
 
 RUTAS PARA POSTMAN:
 ```
@@ -21,13 +19,16 @@ DELETE:pid ==> http://localhost:8082/api/products/{id}
 CART
 
 GET/ ==> http://localhost:8082/api/carts
-GET/:cid ==> http://localhost:8082/api/carts/:id
+GET/:cid ==> http://localhost:8082/api/carts/66bf7dde9400c9b36615b18c
 POST/ ==> http://localhost:8082/api/carts
-post/:cid/:pid ==> http://localhost:8082/api/carts/:cid/product/:pid
+post/:cid/:pid ==> http://localhost:8082/api/carts/66bf7dde9400c9b36615b18c/product/:pid
+DELETE/carts/:cid ==> http://localhost:8082/api/carts/66bf7dde9400c9b36615b18c
+DELETE/carts/:cid/products ==> http://localhost:8082/api/carts/66bf7dde9400c9b36615b18c/products
+DELETE/carts/:cid/products/:pid ==> http://localhost:8082/api/carts/66bf7dde9400c9b36615b18c/products/:pid
 
 ```
 ------------------------------------------------------
-Video Funcionalidad realTimeProducts:
+Video Añadiendo un producto al Carrito:
 
 https://github.com/user-attachments/assets/7fd884a2-a7e1-4feb-b146-1ab117eac554
 

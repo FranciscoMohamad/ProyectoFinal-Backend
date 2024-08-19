@@ -40,7 +40,7 @@ router.get('/product/:id', async (req, res) => {
     try {
         const productId = req.params.id;
 
-        // Validación para asegurar que productId es un ObjectId válido
+        // Validación productId
         if (!mongoose.Types.ObjectId.isValid(productId)) {
             return res.status(400).send('ID de producto inválido');
         }

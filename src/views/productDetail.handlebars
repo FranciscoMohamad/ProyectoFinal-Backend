@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,18 +18,17 @@
     {{#if product.thumbnails.length}}
         <h3>Imágenes:</h3>
         {{#each product.thumbnails}}
-            <img src="{{this}}" alt="Imagen del producto">
+            <img src="https://via.placeholder.com/150" alt="Imagen de prueba">
         {{/each}}
     {{/if}}
 
     <!-- Botón para añadir al carrito -->
-    <form action="/api/carts/{{cartId}}/products" method="POST">
-        <input type="hidden" name="productId" value="{{product._id}}">
-        <label for="quantity">Cantidad:</label>
-        <input type="number" id="quantity" name="quantity" min="1" value="1">
-        <button type="submit">Añadir al carrito</button>
-    </form>
-
+ <form action="/api/carts/66bf7dde9400c9b36615b18c/products" method="POST">
+    <input type="hidden" name="productId" value="{{product._id}}">
+    <label for="quantity">Cantidad:</label>
+    <input type="number" id="quantity" name="quantity" min="1" value="1">
+    <button type="submit">Añadir al carrito</button>
+</form>
     <a href="/api/products"><button>Volver a la lista</button></a>
 
 </body>

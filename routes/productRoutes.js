@@ -64,19 +64,21 @@ router.get('/', async (req, res) => {
 // Endpoint para obtener un producto por ID
 router.get('/:id', async (req, res) => {
     try {
-        const cartId = req.params.id;
+        const productId = req.params.id;
+        const cartId = '66bf7dde9400c9b36615b18c';
 
-        // Encuentra el carrito por su ID y popula los detalles de los productos
-        const cart = await cartModel.findById(cartId).populate('products.product');
+        // Encuentra el producto por su ID
+        const product = await productModel.findById(productId);
 
-        if (!cart) {
-            return res.status(404).send('Carrito no encontrado');
+        if (!product) {
+            return res.status(404).send('Producto no encontrado');
         }
 
-        res.render('cartDetail', { cart }); // Renderiza la vista cartDetail con el carrito y sus productos
+        // Renderiza la vista con el producto y el cartId
+        res.render('productDetail', { product, cartId });
     } catch (error) {
-        console.error('Error al obtener el carrito:', error);
-        res.status(500).send('Error al obtener el carrito');
+        console.error('Error al obtener el producto:', error);
+        res.status(500).send('Error al obtener el producto');
     }
 });
 

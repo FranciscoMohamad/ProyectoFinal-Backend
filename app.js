@@ -1,5 +1,6 @@
 import express from 'express';
 import { create as createHandlebars } from 'express-handlebars';
+import bodyParser from 'body-parser';
 import __dirname from './src/utils.js';
 //Rutas
 import viewsRoutes from './routes/viewsRoutes.js';
@@ -35,6 +36,7 @@ const hbs = createHandlebars({
    
 });
 
+
 app.engine('handlebars', hbs.engine);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
@@ -43,6 +45,7 @@ app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
 
 // Middleware para parsear JSON
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
