@@ -1,8 +1,7 @@
 import express from 'express';
 import { Router } from 'express';
-import productModel from '../src/models/product.model.js';
+import productModel from '../models/product.model.js';
 import mongoose from "mongoose";
-
 
 const router = Router();
 
@@ -36,11 +35,12 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/product/:id', async (req, res) => {
+// Ruta para la vista de detalles del producto
+router.get('/api/product/:id', async (req, res) => {
     try {
         const productId = req.params.id;
 
-        // Validación productId
+        // Validación del ID de producto
         if (!mongoose.Types.ObjectId.isValid(productId)) {
             return res.status(400).send('ID de producto inválido');
         }
@@ -59,4 +59,6 @@ router.get('/product/:id', async (req, res) => {
 });
 
 export default router;
+
+
 

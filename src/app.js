@@ -1,7 +1,7 @@
 import express from 'express';
 import { create as createHandlebars } from 'express-handlebars';
 import bodyParser from 'body-parser';
-import __dirname from './src/utils.js';
+import __dirname from './utils.js';
 //Rutas
 import viewsRoutes from './routes/viewsRoutes.js';
 import productRoutes from './routes/productRoutes.js';

@@ -1,5 +1,5 @@
 import express from 'express';
-import productModel from '../src/models/product.model.js';
+import productModel from '../models/product.model.js';
 
 const router = express.Router();
 
@@ -31,8 +31,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-// GET /api/products
-router.get('/', async (req, res) => { 
+// GET /api/products - Obtener productos en formato JSON
+router.get('/', async (req, res) => {
     try {
         const { limit = 5, page = 1, sort, query } = req.query;
 
@@ -45,16 +45,7 @@ router.get('/', async (req, res) => {
         };
 
         const products = await productModel.paginate(filter, options);
-
-        res.render('index', {
-            products: products.docs,
-            hasPrevPage: products.hasPrevPage,
-            hasNextPage: products.hasNextPage,
-            prevPage: products.prevPage,
-            nextPage: products.nextPage,
-            page: products.page,
-            totalPages: products.totalPages,
-        });
+        res.json(products);  // Devuelve los productos en formato JSON
     } catch (error) {
         console.error('Error al obtener los productos:', error);
         res.status(500).send('Error al obtener los productos');
@@ -67,14 +58,12 @@ router.get('/:id', async (req, res) => {
         const productId = req.params.id;
         const cartId = '66bf7dde9400c9b36615b18c';
 
-        // Encuentra el producto por su ID
         const product = await productModel.findById(productId);
 
         if (!product) {
             return res.status(404).send('Producto no encontrado');
         }
 
-        // Renderiza la vista con el producto y el cartId
         res.render('productDetail', { product, cartId });
     } catch (error) {
         console.error('Error al obtener el producto:', error);
@@ -125,6 +114,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 export default router;
+
 
 
 
