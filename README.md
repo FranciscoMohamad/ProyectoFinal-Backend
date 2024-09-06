@@ -25,10 +25,12 @@ post/:cid/:pid ==> http://localhost:8082/api/carts/66bf7dde9400c9b36615b18c/prod
 DELETE/carts/:cid ==> http://localhost:8082/api/carts/66bf7dde9400c9b36615b18c
 DELETE/carts/:cid/products ==> http://localhost:8082/api/carts/66bf7dde9400c9b36615b18c/products
 DELETE/carts/:cid/products/:pid ==> http://localhost:8082/api/carts/66bf7dde9400c9b36615b18c/products/:pid
+PUT/carts/:cid ==> http://localhost:8082/api/carts/66bf7dde9400c9b36615b18c
+PUT/carts/:cid/products/:pid ==> http://localhost:8082/api/carts/66bf7dde9400c9b36615b18c/products/:pid
 
 ```
 ------------------------------------------------------
 Video Añadiendo un producto al Carrito:
 
-https://github.com/user-attachments/assets/7fd884a2-a7e1-4feb-b146-1ab117eac554
+https://github.com/user-attachments/assets/9b0b1a48-25ea-4693-89f8-e2b00e519aa0
 
